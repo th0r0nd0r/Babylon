@@ -90,7 +90,14 @@ var createScene = function () {
             // Add and manipulate meshes in the scene
             var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:2}, scene);
 
-            const box = BABYLON.MeshBuilder.CreateBox("box", {height: 2, width: 5, depth: 4,}, scene);
+            const boxColors = new Array(6);
+
+            boxColors[1] = new BABYLON.Color4(1,0,1,0);
+            boxColors[2] = new BABYLON.Color4(1,1,1,0);
+            boxColors[3] = new BABYLON.Color4(1,0,0,0);
+            boxColors[4] = new BABYLON.Color4(1,0,0,1);
+
+            const box = BABYLON.MeshBuilder.CreateBox("box", {height: 2, width: 5, depth: 4, faceColors: boxColors}, scene);
 
             return scene;
     };

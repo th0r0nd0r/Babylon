@@ -75,36 +75,41 @@ var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 /******* Add the create scene function ******/
 var createScene = function () {
 
-            // Create the scene space
-            var scene = new BABYLON.Scene(engine);
+  // Create the scene space
+  var scene = new BABYLON.Scene(engine);
 
-            // Add a camera to the scene and attach it to the canvas
-            var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, BABYLON.Vector3.Zero(), scene);
-            camera.attachControl(canvas, true);
+  // Add a camera to the scene and attach it to the canvas
+  var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, BABYLON.Vector3.Zero(), scene);
+  camera.attachControl(canvas, true);
 
-            // Add lights to the scene
-            var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
-            var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
+  // Add lights to the scene
+  var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
+  var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
 
 
-            // Add and manipulate meshes in the scene
-            var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:2}, scene);
+  // Add and manipulate meshes in the scene
+  var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:2}, scene);
 
-            const boxColors = new Array(6);
+  // making a box and coloring its faces
+  const boxColors = new Array(6);
 
-            boxColors[1] = new BABYLON.Color4(1,0,1,0);
-            boxColors[2] = new BABYLON.Color4(1,1,1,0);
-            boxColors[3] = new BABYLON.Color4(1,0,0,0);
-            boxColors[4] = new BABYLON.Color4(1,0,0,1);
+  boxColors[1] = new BABYLON.Color4(1,0,1,0);
+  boxColors[2] = new BABYLON.Color4(1,1,1,0);
+  boxColors[3] = new BABYLON.Color4(1,0,0,0);
+  boxColors[4] = new BABYLON.Color4(1,0,0,1);
 
-            const box = BABYLON.MeshBuilder.CreateBox("box", {height: 2, width: 5, depth: 4, faceColors: boxColors}, scene);
+  const box = BABYLON.MeshBuilder.CreateBox("box", {height: 2, width: 5, depth: 4, faceColors: boxColors}, scene);
 
-            return scene;
-    };
+  return scene;
+};
 
     /******* End of the create scene function ******/    
 
     var scene = createScene(); //Call the createScene function
+
+scene.enablePhysics();
+
+var ground = BABYLON.Mesh.CreateGround("ground1", 16, 16, 2, scene);
 
 engine.runRenderLoop(function () { // Register a render loop to repeatedly render the scene
         scene.render();

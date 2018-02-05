@@ -72,44 +72,47 @@ var canvas = document.getElementById("renderCanvas"); // Get the canvas element
 var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
 
-/******* Add the create scene function ******/
 var createScene = function () {
 
-  // Create the scene space
+  // This creates a basic Babylon Scene object (non-mesh)
   var scene = new BABYLON.Scene(engine);
 
-  // Add a camera to the scene and attach it to the canvas
-  var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, BABYLON.Vector3.Zero(), scene);
+  // This creates and positions a free camera (non-mesh)
+  var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+
+  // This targets the camera to scene origin
+  camera.setTarget(BABYLON.Vector3.Zero());
+
+  // This attaches the camera to the canvas
   camera.attachControl(canvas, true);
 
-  // Add lights to the scene
-  var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
-  var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
+  // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+  var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
 
+  // Default intensity is 1. Let's dim the light a small amount
+  light.intensity = 0.7;
 
-  // Add and manipulate meshes in the scene
-  var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:2}, scene);
+  // Our built-in 'sphere' shape. Params: name, subdivs, size, scene
+  var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
 
-  // making a box and coloring its faces
-  const boxColors = new Array(6);
+  // Move the sphere upward 1/2 its height
+  sphere.position.y = 2;
 
-  boxColors[1] = new BABYLON.Color4(1,0,1,0);
-  boxColors[2] = new BABYLON.Color4(1,1,1,0);
-  boxColors[3] = new BABYLON.Color4(1,0,0,0);
-  boxColors[4] = new BABYLON.Color4(1,0,0,1);
-
-  const box = BABYLON.MeshBuilder.CreateBox("box", {height: 2, width: 5, depth: 4, faceColors: boxColors}, scene);
-
-  return scene;
-};
-
-    /******* End of the create scene function ******/    
-
-    var scene = createScene(); //Call the createScene function
+  // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
+  var ground = BABYLON.Mesh.CreateGround("ground1", 16, 16, 2, scene);
 
 scene.enablePhysics();
 
-var ground = BABYLON.Mesh.CreateGround("ground1", 16, 16, 2, scene);
+sphere.physicsImpostor = new BABYLON.PhysicsImpostor(sphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 0.9 }, scene);
+ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+
+sphere.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(1, 0, 1));
+
+  return scene;
+
+};
+
+var scene = createScene();
 
 engine.runRenderLoop(function () { // Register a render loop to repeatedly render the scene
         scene.render();

@@ -31,9 +31,9 @@ clothMat.backFaceCulling = false;
 
   // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
   var ground = BABYLON.Mesh.CreateGround("ground1", groundWidth, groundWidth, subdivisions - 1, scene, true);
-var ground2 = BABYLON.Mesh.CreateGround("ground2", groundWidth, groundWidth, 2, scene, false);
+// var ground2 = BABYLON.Mesh.CreateGround("ground2", groundWidth, groundWidth, 2, scene, false);
 ground.material = clothMat;
-  ground2.material = clothMat;
+  // ground2.material = clothMat;
 
   ground.rotation.x = Math.PI / 2;
   // ground2.rotation.y = Math.PI;
@@ -59,7 +59,7 @@ function createJoint(imp1, imp2) {
 spheres.forEach(function (point, idx) {
   var mass = 1;
   point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.ParticleImpostor, { mass: mass }, scene);
-  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(4,12,0));
+  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,12,0));
       if (idx >= subdivisions) {
     createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor);
     if (idx % subdivisions) {

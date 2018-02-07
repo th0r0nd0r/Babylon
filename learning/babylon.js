@@ -59,13 +59,15 @@ clothMat.backFaceCulling = false;
 
   // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
   var ground = BABYLON.Mesh.CreateGround("ground1", groundWidth, groundWidth, subdivisions - 1, scene, true);
-// var ground2 = BABYLON.Mesh.CreateGround("ground2", groundWidth, groundWidth, 2, scene, false);
-ground.material = clothMat;
+  ground.material = clothMat;
   // ground2.material = clothMat;
 
-  // ground.rotation.x = Math.PI / 2;
-  // ground2.rotation.y = Math.PI;
+  var ground2 = BABYLON.Mesh.CreateGround("ground2", 100, 100, 2, scene, false);
+  ground2.physicsImpostor = new BABYLON.PhysicsImpostor(ground2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+
+  ground2.position.y = -30;
   
+
 var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind));
 ground.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
 
@@ -112,7 +114,7 @@ ground.registerBeforeRender(function () {
 var bigSphere = BABYLON.MeshBuilder.CreateSphere("bigSphere", { diameter: 4, segments: 16 }, scene);
 bigSphere.position.y = -8;
 bigSphere.position.z = 25;
-bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0 }, scene);
+bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: .1 }, scene);
 
 
   return scene;

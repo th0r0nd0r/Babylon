@@ -72,22 +72,30 @@ var canvas = document.getElementById("renderCanvas"); // Get the canvas element
 var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
 const translatePositions = (positions) => {
+  console.log("positions: ", positions);
+  console.log(positions.length);
   let xIdx = 0;
-  let zIdx = 2;
+  let yIdx = 1;
 
-  for (let i = 0; i < positions.length; i++) {
+  const length = positions.length - 3;
+  for (let i = 0; i < length; i++) {
+    // console.log("i: ", i);
+    console.log("length: ", positions.length);
     if (i === xIdx) {
       let x = positions[xIdx];
-      let z = positions[zIdx];
+      let y = positions[yIdx];
 
-      positions[xIdx] = z;
-      positions[zIdx] = x;
+      positions[xIdx] = y;
+      positions[yIdx] = x;
 
-      xIdx += 2;
-      zIdx += 2;
+      xIdx += 3;
+      yIdx += 3;
     }
+
+
   }
 
+  console.log("updated positions: ", positions);
   return positions;
 };
 
@@ -124,11 +132,11 @@ clothMat.backFaceCulling = false;
 ground.material = clothMat;
   // ground2.material = clothMat;
 
-  ground.rotation.x = Math.PI / 2;
+  // ground.rotation.x = Math.PI / 2;
   // ground2.rotation.y = Math.PI;
   
 var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind));
-
+ground.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
 
 
 var spheres = [];
@@ -171,7 +179,7 @@ ground.registerBeforeRender(function () {
 });
 
 var bigSphere = BABYLON.MeshBuilder.CreateSphere("bigSphere", { diameter: 4, segments: 16 }, scene);
-bigSphere.position.y = -3;
+bigSphere.position.y = -8;
 bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0 }, scene);
 
 

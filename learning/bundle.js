@@ -71,6 +71,26 @@ var canvas = document.getElementById("renderCanvas"); // Get the canvas element
 
 var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
+const translatePositions = (positions) => {
+  let xIdx = 0;
+  let zIdx = 2;
+
+  for (let i = 0; i < positions.length; i++) {
+    if (i === xIdx) {
+      let x = positions[xIdx];
+      let z = positions[zIdx];
+
+      positions[xIdx] = z;
+      positions[zIdx] = x;
+
+      xIdx += 2;
+      zIdx += 2;
+    }
+  }
+
+  return positions;
+};
+
 
 var createScene = function () {
 
@@ -107,7 +127,10 @@ ground.material = clothMat;
   ground.rotation.x = Math.PI / 2;
   // ground2.rotation.y = Math.PI;
   
-var positions = ground.getVerticesData(BABYLON.VertexBuffer.PositionKind);
+var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind));
+
+
+
 var spheres = [];
 for (var i = 0; i < positions.length; i = i + 3) {
   var v = BABYLON.Vector3.FromArray(positions, i);

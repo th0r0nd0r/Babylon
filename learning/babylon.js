@@ -111,6 +111,7 @@ ground.registerBeforeRender(function () {
 
 var bigSphere = BABYLON.MeshBuilder.CreateSphere("bigSphere", { diameter: 4, segments: 16 }, scene);
 bigSphere.position.y = -8;
+bigSphere.position.z = 25;
 bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0 }, scene);
 
 

@@ -74,21 +74,21 @@ var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 const translatePositions = (positions) => {
   console.log("positions: ", positions);
   console.log(positions.length);
-  let xIdx = 0;
   let yIdx = 1;
+  let zIdx = 2;
 
-  const length = positions.length - 3;
-  for (let i = 0; i < length; i++) {
+  const length = positions.length - 2;
+  for (let i = 0; i <= length; i++) {
     // console.log("i: ", i);
     console.log("length: ", positions.length);
-    if (i === xIdx) {
-      let x = positions[xIdx];
+    if (i === zIdx) {
+      let z = positions[zIdx];
       let y = positions[yIdx];
 
-      positions[xIdx] = y;
-      positions[yIdx] = x;
+      positions[zIdx] = y;
+      positions[yIdx] = z;
 
-      xIdx += 3;
+      zIdx += 3;
       yIdx += 3;
     }
 

@@ -90,7 +90,7 @@ function createJoint(imp1, imp2) {
 spheres.forEach(function (point, idx) {
   var mass = 1;
   point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.ParticleImpostor, { mass: mass }, scene);
-  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,12,0));
+  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,20));
       if (idx >= subdivisions) {
     createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor);
     if (idx % subdivisions) {
@@ -119,6 +119,8 @@ bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.Physi
 };
 
 var scene = createScene();
+
+// scene.debugLayer.show();
 
 engine.runRenderLoop(function () { // Register a render loop to repeatedly render the scene
         scene.render();

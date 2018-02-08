@@ -8,7 +8,7 @@
 Player = function(scene, spawnPoint) {
 
   if (!spawnPoint) {
-      spawnPoint = new BABYLON.Vector3(0,10,-10);
+      spawnPoint = new BABYLON.Vector3(0,10,0);
   }
 
   // The player spawnPoint
@@ -20,9 +20,9 @@ Player = function(scene, spawnPoint) {
   // The player eyes height
   this.height = 2;
   // The player speed
-  this.speed = 1;
+  this.speed = 10;
   // The player inertia
-  this.inertia = 0.9;
+  this.inertia = 0.2;
   // The player angular inertia
   this.angularInertia = 0;
   // The mouse sensibility (lower the better sensible)
@@ -109,10 +109,10 @@ Player.prototype = {
       var cam = new BABYLON.FreeCamera("camera", this.spawnPoint, this.scene);
       cam.attachControl(this.scene.getEngine().getRenderingCanvas());
       cam.ellipsoid = new BABYLON.Vector3(2, this.height, 2);
-      cam.checkCollisions = true;
+      cam.checkCollisions = false;
       cam.applyGravity = true;
       // ZQSD
-      cam.keysUp = [87]; // W
+      cam.keysUp.push(87); // W
       cam.keysDown = [83]; // S
       cam.keysLeft = [65]; // A
       cam.keysRight = [68]; // D

@@ -1,3 +1,5 @@
+import './Player.js';
+
 var canvas = document.getElementById("renderCanvas"); // Get the canvas element 
 
 var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
@@ -120,11 +122,13 @@ bigSphere.registerBeforeRender ( () => {
 });
 
 
-  return scene;
+return scene;
 
 };
 
 var scene = createScene();
+
+const player = new Player(scene);
 
 // scene.debugLayer.show();
 

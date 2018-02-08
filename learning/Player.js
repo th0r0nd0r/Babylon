@@ -5,7 +5,7 @@
  * @param spawnPoint The spawning point of the player
  * @constructor
  */
-const Player = function(scene, spawnPoint) {
+Player = function(scene, spawnPoint) {
 
   if (!spawnPoint) {
       spawnPoint = new BABYLON.Vector3(0,10,-10);
@@ -112,9 +112,9 @@ Player.prototype = {
       cam.checkCollisions = true;
       cam.applyGravity = true;
       // ZQSD
-      cam.keysUp = [90]; // Z
+      cam.keysUp = [87]; // W
       cam.keysDown = [83]; // S
-      cam.keysLeft = [81]; // Q
+      cam.keysLeft = [65]; // A
       cam.keysRight = [68]; // D
       cam.speed = this.speed;
       cam.inertia = this.inertia;

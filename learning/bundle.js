@@ -115,7 +115,7 @@ camera.attachControl(canvas, true);
   light.intensity = 0.7;
 
 var subdivisions = 20;
-var groundWidth = 10;
+var groundWidth = 8;
 
 var distanceBetweenPoints = groundWidth / subdivisions;	
 
@@ -129,8 +129,8 @@ clothMat.backFaceCulling = false;
   ground.material = clothMat;
   // realGround.material = clothMat;
 
-  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: 2, width: 200, depth: 200}, scene);
-  realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0 }, scene);
+  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: 2, width: 400, depth: 400}, scene);
+  realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
 
   realGround.position.y = -30;
   
@@ -157,9 +157,9 @@ function createJoint(imp1, imp2) {
 
 //create the impostors
 spheres.forEach(function (point, idx) {
-  var mass = 1;
+  var mass = 15;
   point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0, radius: .1 }, scene);
-  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,0));
+  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,50));
       if (idx >= subdivisions) {
     createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor);
     if (idx % subdivisions) {
@@ -178,12 +178,15 @@ ground.registerBeforeRender(function () {
   ground.refreshBoundingInfo();
 });
 
-var bigSphere = BABYLON.MeshBuilder.CreateSphere("bigSphere", { diameter: 2, segments: 16 }, scene);
-bigSphere.position.y = 5;
+var bigSphere = BABYLON.MeshBuilder.CreateSphere("bigSphere", { diameter: 1, segments: 16 }, scene);
+bigSphere.position.y = 1;
 bigSphere.position.x = 0;
-bigSphere.position.z = 40;
-bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 30, restitution: 0, friction: 1 }, scene);
-// Cannon.applyForce(bigSphere.physicsImpostor, new BABYLON.Vector3(0,20,0));
+bigSphere.position.z = 8;
+bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 50, restitution: 0, friction: 10 }, scene);
+
+bigSphere.registerBeforeRender ( () => {
+  // bigSphere.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,0,0), bigSphere.getAbsolutePosition());
+});
 
 
   return scene;

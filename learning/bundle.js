@@ -127,8 +127,8 @@ clothMat.backFaceCulling = false;
   ground.material = clothMat;
   // realGround.material = clothMat;
 
-  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: 2, width: 200, depth: 85}, scene);
-  realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0 }, scene);
+  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: 2, width: 200, depth: 200}, scene);
+  realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
 
   realGround.position.y = -30;
   
@@ -156,8 +156,8 @@ function createJoint(imp1, imp2) {
 //create the impostors
 spheres.forEach(function (point, idx) {
   var mass = 1;
-  point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0, radius: .1 }, scene);
-  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,10));
+  point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0.5, radius: .1 }, scene);
+  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,40));
       if (idx >= subdivisions) {
     createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor);
     if (idx % subdivisions) {
@@ -177,9 +177,10 @@ ground.registerBeforeRender(function () {
 });
 
 var bigSphere = BABYLON.MeshBuilder.CreateSphere("bigSphere", { diameter: 4, segments: 16 }, scene);
-bigSphere.position.y = 15;
-bigSphere.position.x = 20;
-bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: .1, restitution: 0 }, scene);
+bigSphere.position.y = 5;
+bigSphere.position.x = 0;
+bigSphere.position.z = 40;
+bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 30, restitution: 0.5, radius: 3 }, scene);
 
 
 

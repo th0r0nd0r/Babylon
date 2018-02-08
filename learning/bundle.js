@@ -228,7 +228,7 @@ window.addEventListener("resize", function () { // Watch for browser/canvas resi
 Player = function(scene, spawnPoint) {
 
   if (!spawnPoint) {
-      spawnPoint = new BABYLON.Vector3(0,10,0);
+      spawnPoint = new BABYLON.Vector3(0,10,-10);
   }
 
   // The player spawnPoint
@@ -240,7 +240,7 @@ Player = function(scene, spawnPoint) {
   // The player eyes height
   this.height = 2;
   // The player speed
-  this.speed = 10;
+  this.speed = 40;
   // The player inertia
   this.inertia = 0.2;
   // The player angular inertia

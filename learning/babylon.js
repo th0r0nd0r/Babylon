@@ -60,7 +60,7 @@ clothMat.backFaceCulling = false;
   ground.material = clothMat;
   // realGround.material = clothMat;
 
-  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: 2, width: 400, depth: 400}, scene);
+  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: .5, width: 400, depth: 400}, scene);
   realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
 
   realGround.position.y = -30;

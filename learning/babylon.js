@@ -3,15 +3,12 @@ var canvas = document.getElementById("renderCanvas"); // Get the canvas element
 var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
 const translatePositions = (positions) => {
-  console.log("positions: ", positions);
   console.log(positions.length);
   let yIdx = 1;
   let zIdx = 2;
 
-  const length = positions.length - 2;
+  const length = positions.length - 1;
   for (let i = 0; i <= length; i++) {
-    // console.log("i: ", i);
-    console.log("length: ", positions.length);
     if (i === zIdx) {
       let z = positions[zIdx];
       let y = positions[yIdx];
@@ -26,7 +23,6 @@ const translatePositions = (positions) => {
 
   }
 
-  console.log("updated positions: ", positions);
   return positions;
 };
 
@@ -47,7 +43,7 @@ camera.attachControl(canvas, true);
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  var subdivisions = 20;
+var subdivisions = 20;
 var groundWidth = 8;
 
 var distanceBetweenPoints = groundWidth / subdivisions;	
@@ -60,12 +56,12 @@ clothMat.backFaceCulling = false;
   // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
   var ground = BABYLON.Mesh.CreateGround("ground1", groundWidth, groundWidth, subdivisions - 1, scene, true);
   ground.material = clothMat;
-  // ground2.material = clothMat;
+  // realGround.material = clothMat;
 
-  var ground2 = BABYLON.Mesh.CreateGround("ground2", 100, 100, 2, scene, false);
-  ground2.physicsImpostor = new BABYLON.PhysicsImpostor(ground2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: 2, width: 200, depth: 85}, scene);
+  realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0 }, scene);
 
-  ground2.position.y = -30;
+  realGround.position.y = -30;
   
 
 var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind));
@@ -84,15 +80,15 @@ for (var i = 0; i < positions.length; i = i + 3) {
 function createJoint(imp1, imp2) {
   var joint = new BABYLON.DistanceJoint({
     maxDistance: distanceBetweenPoints
-  })
+  });
   imp1.addJoint(imp2, joint);
 }
 
 //create the impostors
 spheres.forEach(function (point, idx) {
   var mass = 1;
-  point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.ParticleImpostor, { mass: mass }, scene);
-  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,20));
+  point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0, radius: .1 }, scene);
+  point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,10));
       if (idx >= subdivisions) {
     createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor);
     if (idx % subdivisions) {
@@ -112,9 +108,10 @@ ground.registerBeforeRender(function () {
 });
 
 var bigSphere = BABYLON.MeshBuilder.CreateSphere("bigSphere", { diameter: 4, segments: 16 }, scene);
-bigSphere.position.y = -8;
-bigSphere.position.z = 25;
-bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: .1 }, scene);
+bigSphere.position.y = 15;
+bigSphere.position.x = 20;
+bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: .1, restitution: 0 }, scene);
+
 
 
   return scene;

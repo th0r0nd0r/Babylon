@@ -144,7 +144,11 @@ Player.prototype = {
    * @param pickInfo The pick data retrieved when the click has been done
    */
   handleUserMouse : function(evt, pickInfo) {
-      this.shoot();
+    console.log("pickInfo: ", pickInfo);
+    console.log("cameraPos: ", this.camera.position);
+    const offsets = [this.camera.position.x, this.camera.position.y, this.camera.position.z];
+
+      this.shoot(offsets);
   }
 
 };

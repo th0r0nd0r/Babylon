@@ -79,7 +79,7 @@ var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
 const Cannon = new BABYLON.CannonJSPlugin;
 
-const translatePositions = (positions) => {
+const translatePositions = (positions, offsets) => {
   console.log(positions.length);
   let yIdx = 1;
   let zIdx = 2;
@@ -103,7 +103,11 @@ const translatePositions = (positions) => {
   return positions;
 };
 
-function shootNet() {
+function shootNet(offsets) {
+
+  if (!offsets) {
+    offsets = [0,0,0];
+  }
 
   var subdivisions = 20;
   var groundWidth = 8;
@@ -122,7 +126,7 @@ function shootNet() {
     // realGround.material = clothMat;
   
   
-  var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind));
+  var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind), offsets);
   ground.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
   
   
@@ -372,7 +376,11 @@ Player.prototype = {
    * @param pickInfo The pick data retrieved when the click has been done
    */
   handleUserMouse : function(evt, pickInfo) {
-      this.shoot();
+    console.log("pickInfo: ", pickInfo);
+    console.log("cameraPos: ", this.camera.position);
+    const offsets = [this.camera.position.x, this.camera.position.y, this.camera.position.z];
+
+      this.shoot(offsets);
   }
 
 };

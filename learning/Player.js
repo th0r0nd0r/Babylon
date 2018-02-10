@@ -8,7 +8,7 @@
 Player = function(scene, shoot, spawnPoint) {
 
   if (!spawnPoint) {
-      spawnPoint = new BABYLON.Vector3(0,10,-50);
+      spawnPoint = new BABYLON.Vector3(0,0,0);
   }
 
   // The player spawnPoint
@@ -144,8 +144,9 @@ Player.prototype = {
    * @param pickInfo The pick data retrieved when the click has been done
    */
   handleUserMouse : function(evt, pickInfo) {
-    console.log("pickInfo: ", pickInfo);
+    // console.log("pickInfo: ", pickInfo);
     console.log("cameraPos: ", this.camera.position);
+    console.log("view matrix:", this.camera.getViewMatrix());
     const offsets = [this.camera.position.x, this.camera.position.y, this.camera.position.z];
 
       this.shoot(offsets);

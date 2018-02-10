@@ -7,18 +7,22 @@ var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 const Cannon = new BABYLON.CannonJSPlugin;
 
 const translatePositions = (positions, offsets) => {
-  console.log(positions.length);
+  console.log("offsets: ", offsets);
+  let xIdx = 0;
   let yIdx = 1;
   let zIdx = 2;
 
   const length = positions.length - 1;
   for (let i = 0; i <= length; i++) {
-    if (i === zIdx) {
+    if (i === xIdx) {
+      positions[xIdx] += offsets[0];
+      xIdx += 3;
+    } else if (i === zIdx) {
       let z = positions[zIdx];
       let y = positions[yIdx];
 
-      positions[zIdx] = y;
-      positions[yIdx] = z;
+      positions[zIdx] = y + offsets[1];
+      positions[yIdx] = z + offsets[2];
 
       zIdx += 3;
       yIdx += 3;
@@ -113,10 +117,10 @@ camera.attachControl(canvas, true);
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: .5, width: 400, depth: 400}, scene);
-  realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
+  // var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: .5, width: 400, depth: 400}, scene);
+  // realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
   
-  realGround.position.y = -30;
+  // realGround.position.y = -30;
 
 
   shootNet();

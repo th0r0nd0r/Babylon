@@ -18,11 +18,13 @@ const translatePositions = (positions, offsets) => {
       positions[xIdx] += offsets[0];
       xIdx += 3;
     } else if (i === zIdx) {
+      positions[yIdx] += offsets[2];
+      positions[zIdx] += offsets[1];
       let z = positions[zIdx];
       let y = positions[yIdx];
 
-      positions[zIdx] = y + offsets[1];
-      positions[yIdx] = z + offsets[2];
+      positions[zIdx] = y;
+      positions[yIdx] = z;
 
       zIdx += 3;
       yIdx += 3;
@@ -66,6 +68,10 @@ function shootNet(offsets) {
     var v = BABYLON.Vector3.FromArray(positions, i);
     
     var s = BABYLON.MeshBuilder.CreateSphere("s" + i, { diameter: 0.1 }, scene);
+
+    s.material =  new BABYLON.StandardMaterial('texture1', scene);
+    s.material.diffuseColor = new BABYLON.Color3(3, 2, 0);
+
     s.position.copyFrom(v);
     spheres.push(s);
   }

@@ -228,7 +228,7 @@ window.addEventListener("resize", function () { // Watch for browser/canvas resi
 Player = function(scene, spawnPoint) {
 
   if (!spawnPoint) {
-      spawnPoint = new BABYLON.Vector3(0,10,-10);
+      spawnPoint = new BABYLON.Vector3(0,10,-50);
   }
 
   // The player spawnPoint

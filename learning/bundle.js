@@ -103,6 +103,68 @@ const translatePositions = (positions) => {
   return positions;
 };
 
+function shootNet() {
+
+  var subdivisions = 20;
+  var groundWidth = 8;
+  
+  var distanceBetweenPoints = groundWidth / subdivisions;	
+  
+  var clothMat = new BABYLON.StandardMaterial("texture3", scene);
+    clothMat.diffuseTexture = new BABYLON.Texture("http://i.imgur.com/2HklR1L.jpg", scene);
+  clothMat.zOffset = -20;
+  clothMat.backFaceCulling = false;
+  
+  
+    // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
+    var ground = BABYLON.Mesh.CreateGround("ground1", groundWidth, groundWidth, subdivisions - 1, scene, true);
+    ground.material = clothMat;
+    // realGround.material = clothMat;
+  
+  
+  var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind));
+  ground.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
+  
+  
+  var spheres = [];
+  for (var i = 0; i < positions.length; i = i + 3) {
+    var v = BABYLON.Vector3.FromArray(positions, i);
+    
+    var s = BABYLON.MeshBuilder.CreateSphere("s" + i, { diameter: 0.1 }, scene);
+    s.position.copyFrom(v);
+    spheres.push(s);
+  }
+  
+  function createJoint(imp1, imp2) {
+    var joint = new BABYLON.DistanceJoint({
+      maxDistance: distanceBetweenPoints
+    });
+    imp1.addJoint(imp2, joint);
+  }
+  
+  //create the impostors
+  spheres.forEach(function (point, idx) {
+    var mass = 15;
+    point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0, radius: .1 }, scene);
+    point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,50));
+        if (idx >= subdivisions) {
+      createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor);
+      if (idx % subdivisions) {
+        createJoint(point.physicsImpostor, spheres[idx - 1].physicsImpostor);
+      }
+    }
+  });
+  
+  ground.registerBeforeRender(function () {
+    var positions = [];
+    spheres.forEach(function (s) {
+      positions.push(s.position.x, s.position.y, s.position.z);
+  
+    });
+    ground.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
+    ground.refreshBoundingInfo();
+  });
+}
 
 var createScene = function () {
 
@@ -125,68 +187,6 @@ camera.attachControl(canvas, true);
   
   realGround.position.y = -30;
 
-  function shootNet() {
-
-    var subdivisions = 20;
-    var groundWidth = 8;
-    
-    var distanceBetweenPoints = groundWidth / subdivisions;	
-    
-    var clothMat = new BABYLON.StandardMaterial("texture3", scene);
-      clothMat.diffuseTexture = new BABYLON.Texture("http://i.imgur.com/2HklR1L.jpg", scene);
-    clothMat.zOffset = -20;
-    clothMat.backFaceCulling = false;
-    
-    
-      // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
-      var ground = BABYLON.Mesh.CreateGround("ground1", groundWidth, groundWidth, subdivisions - 1, scene, true);
-      ground.material = clothMat;
-      // realGround.material = clothMat;
-    
-    
-    var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind));
-    ground.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
-    
-    
-    var spheres = [];
-    for (var i = 0; i < positions.length; i = i + 3) {
-      var v = BABYLON.Vector3.FromArray(positions, i);
-      
-      var s = BABYLON.MeshBuilder.CreateSphere("s" + i, { diameter: 0.1 }, scene);
-      s.position.copyFrom(v);
-      spheres.push(s);
-    }
-    
-    function createJoint(imp1, imp2) {
-      var joint = new BABYLON.DistanceJoint({
-        maxDistance: distanceBetweenPoints
-      });
-      imp1.addJoint(imp2, joint);
-    }
-    
-    //create the impostors
-    spheres.forEach(function (point, idx) {
-      var mass = 15;
-      point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0, radius: .1 }, scene);
-      point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,50));
-          if (idx >= subdivisions) {
-        createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor);
-        if (idx % subdivisions) {
-          createJoint(point.physicsImpostor, spheres[idx - 1].physicsImpostor);
-        }
-      }
-    });
-    
-    ground.registerBeforeRender(function () {
-      var positions = [];
-      spheres.forEach(function (s) {
-        positions.push(s.position.x, s.position.y, s.position.z);
-    
-      });
-      ground.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
-      ground.refreshBoundingInfo();
-    });
-  }
 
   shootNet();
 
@@ -206,6 +206,8 @@ return scene;
 };
 
 var scene = createScene();
+
+console.log("cloth method: ", shootNet);
 
 const player = new Player(scene);
 

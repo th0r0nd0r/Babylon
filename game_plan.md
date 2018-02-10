@@ -8,3 +8,8 @@
 - create birds with simple flight paths that are physics enabled
 
 - have a score counter that increments when a bird falls below some point for some amt. of time
+
+
+
+- find a way to modularize cloth creation
+- create a new cloth on player click

@@ -136,7 +136,7 @@ var scene = createScene();
 
 console.log("cloth method: ", shootNet);
 
-const player = new Player(scene);
+const player = new Player(scene, shootNet);
 
 // scene.debugLayer.show();
 

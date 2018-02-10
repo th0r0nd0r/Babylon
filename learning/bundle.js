@@ -209,7 +209,7 @@ var scene = createScene();
 
 console.log("cloth method: ", shootNet);
 
-const player = new Player(scene);
+const player = new Player(scene, shootNet);
 
 // scene.debugLayer.show();
 
@@ -233,7 +233,7 @@ window.addEventListener("resize", function () { // Watch for browser/canvas resi
  * @param spawnPoint The spawning point of the player
  * @constructor
  */
-Player = function(scene, spawnPoint) {
+Player = function(scene, shoot, spawnPoint) {
 
   if (!spawnPoint) {
       spawnPoint = new BABYLON.Vector3(0,10,-50);
@@ -243,6 +243,8 @@ Player = function(scene, spawnPoint) {
   this.spawnPoint = spawnPoint;
   // The game scene
   this.scene = scene;
+
+  this.shoot = shoot;
   // The game
   // this.game = game;
   // The player eyes height
@@ -369,9 +371,9 @@ Player.prototype = {
    * @param evt
    * @param pickInfo The pick data retrieved when the click has been done
    */
-  // handleUserMouse : function(evt, pickInfo) {
-  //     this.weapon.fire(pickInfo);
-  // }
+  handleUserMouse : function(evt, pickInfo) {
+      this.shoot();
+  }
 
 };
 

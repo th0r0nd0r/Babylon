@@ -196,10 +196,10 @@ camera.attachControl(canvas, true);
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  // var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: .5, width: 400, depth: 400}, scene);
-  // realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
+  var realGround = BABYLON.MeshBuilder.CreateBox("realGround", {height: .5, width: 400, depth: 400}, scene);
+  realGround.physicsImpostor = new BABYLON.PhysicsImpostor(realGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
   
-  // realGround.position.y = -30;
+  realGround.position.y = -30;
 
 
   shootNet();

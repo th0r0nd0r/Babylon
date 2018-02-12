@@ -22,7 +22,7 @@ Player = function(scene, shoot, spawnPoint) {
   // The player eyes height
   this.height = 2;
   // The player speed
-  this.speed = 40;
+  this.speed = 10;
   // The player inertia
   this.inertia = 0.2;
   // The player angular inertia
@@ -147,6 +147,8 @@ Player.prototype = {
     // console.log("pickInfo: ", pickInfo);
     console.log("cameraPos: ", this.camera.position);
     console.log("view matrix:", this.camera.getViewMatrix());
+
+    // use offsets in translatePositions function to create net on camera location
     const offsets = [this.camera.position.x, this.camera.position.y, this.camera.position.z];
 
       this.shoot(offsets);

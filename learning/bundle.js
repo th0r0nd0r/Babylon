@@ -119,6 +119,8 @@ function shootNet(offsets) {
   var groundWidth = 8;
   
   var distanceBetweenPoints = groundWidth / subdivisions;	
+
+  const diagonalDistance = Math.sqrt(2 * Math.pow(distanceBetweenPoints, 2));
   
   var clothMat = new BABYLON.StandardMaterial("texture3", scene);
     clothMat.diffuseTexture = new BABYLON.Texture("http://i.imgur.com/2HklR1L.jpg", scene);
@@ -149,23 +151,37 @@ function shootNet(offsets) {
     spheres.push(s);
   }
   
-  function createJoint(imp1, imp2) {
+  function createJoint(imp1, imp2, diagonal) {
+    let maxDistance;
+
+    if (diagonal) {
+      maxDistance = diagonalDistance;
+    } else {
+      maxDistance = distanceBetweenPoints;
+    }
+
     var joint = new BABYLON.DistanceJoint({
-      maxDistance: distanceBetweenPoints
+      maxDistance,
+      maxForce: 10000000000000000000000000
     });
     imp1.addJoint(imp2, joint);
   }
+
   
   //create the impostors
+  console.log("spheres: ", spheres);
   spheres.forEach(function (point, idx) {
-    var mass = 15;
-    point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0, radius: .1 }, scene);
-    point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,50));
-        if (idx >= subdivisions) {
-      createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor);
+    var mass = 10;
+    point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0, radius: .1, friction: 1 }, scene);
+    point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,20));
+      if (idx >= subdivisions) {
+        createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor, false);
       if (idx % subdivisions) {
-        createJoint(point.physicsImpostor, spheres[idx - 1].physicsImpostor);
+        point.material.diffuseColor = new BABYLON.Color3(0, 2, 1);
+        createJoint(point.physicsImpostor, spheres[idx - 1].physicsImpostor, false);
+        // createJoint(point.physicsImpostor, spheres[idx - subdivisions - 1].physicsImpostor, true);
       }
+      
     }
   });
   
@@ -208,12 +224,17 @@ var bigSphere = BABYLON.MeshBuilder.CreateSphere("bigSphere", { diameter: 1, seg
 bigSphere.position.y = 1;
 bigSphere.position.x = 0;
 bigSphere.position.z = 8;
-bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 50, restitution: 0, friction: 10 }, scene);
+bigSphere.physicsImpostor = new BABYLON.PhysicsImpostor(bigSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 50, restitution: 0, friction: 1 }, scene);
 
-bigSphere.registerBeforeRender ( () => {
-  // bigSphere.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,0,0), bigSphere.getAbsolutePosition());
+
+const newSphere = BABYLON.MeshBuilder.CreateBox("newSphere", {height: 2, width: 2, depth: 2}, scene);
+newSphere.position.y = 0;
+newSphere.position.x = -10;
+newSphere.physicsImpostor = new BABYLON.PhysicsImpostor(newSphere, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
+
+newSphere.registerBeforeRender ( () => {
+  newSphere.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,10,0), newSphere.getAbsolutePosition());
 });
-
 
 return scene;
 
@@ -264,7 +285,7 @@ Player = function(scene, shoot, spawnPoint) {
   // The player eyes height
   this.height = 2;
   // The player speed
-  this.speed = 40;
+  this.speed = 10;
   // The player inertia
   this.inertia = 0.2;
   // The player angular inertia
@@ -389,6 +410,8 @@ Player.prototype = {
     // console.log("pickInfo: ", pickInfo);
     console.log("cameraPos: ", this.camera.position);
     console.log("view matrix:", this.camera.getViewMatrix());
+
+    // use offsets in translatePositions function to create net on camera location
     const offsets = [this.camera.position.x, this.camera.position.y, this.camera.position.z];
 
       this.shoot(offsets);

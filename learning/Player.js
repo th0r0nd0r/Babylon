@@ -157,9 +157,9 @@ Player.prototype = {
     console.log("direction: ", direction);
 
     // use offsets in translatePositions function to create net on camera location
-    const offsets = [this.camera.position.x, this.camera.position.y, this.camera.position.z];
+    const cameraPos = this.camera.position;
 
-      this.shoot(offsets, direction);
+      this.shoot(cameraPos, direction);
   }
 
 };

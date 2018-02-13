@@ -6,8 +6,8 @@ var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
 const Cannon = new BABYLON.CannonJSPlugin;
 
-const translatePositions = (positions, offsets) => {
-  console.log("offsets: ", offsets);
+const translatePositions = (positions, cameraPos) => {
+  console.log("cameraPos: ", cameraPos);
   let xIdx = 0;
   let yIdx = 1;
   let zIdx = 2;
@@ -15,11 +15,11 @@ const translatePositions = (positions, offsets) => {
   const length = positions.length - 1;
   for (let i = 0; i <= length; i++) {
     if (i === xIdx) {
-      positions[xIdx] += offsets[0];
+      positions[xIdx] += cameraPos.x;
       xIdx += 3;
     } else if (i === zIdx) {
-      positions[yIdx] += offsets[2];
-      positions[zIdx] += offsets[1];
+      positions[yIdx] += cameraPos.z;
+      positions[zIdx] += cameraPos.y;
       let z = positions[zIdx];
       let y = positions[yIdx];
 
@@ -36,10 +36,10 @@ const translatePositions = (positions, offsets) => {
   return positions;
 };
 
-function shootNet(offsets, direction) {
+function shootNet(cameraPos, direction) {
 
-  if (!offsets) {
-    offsets = [0,0,0];
+  if (!cameraPos) {
+    cameraPos = {x: 0, y: 0, z: 0};
   }
 
   if (!direction) {
@@ -65,7 +65,7 @@ function shootNet(offsets, direction) {
     // realGround.material = clothMat;
   
   
-  var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind), offsets);
+  var positions = translatePositions(ground.getVerticesData(BABYLON.VertexBuffer.PositionKind), cameraPos);
   ground.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
   
   

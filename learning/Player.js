@@ -5,7 +5,7 @@
  * @param spawnPoint The spawning point of the player
  * @constructor
  */
-Player = function(scene, shoot, spawnPoint) {
+Player = function(scene, net, spawnPoint) {
 
   if (!spawnPoint) {
       spawnPoint = new BABYLON.Vector3(0,0,0);
@@ -16,7 +16,7 @@ Player = function(scene, shoot, spawnPoint) {
   // The game scene
   this.scene = scene;
 
-  this.shoot = shoot;
+  this.shoot = net.shootNet;
   // The game
   // this.game = game;
   // The player eyes height

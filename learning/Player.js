@@ -148,10 +148,18 @@ Player.prototype = {
     console.log("cameraPos: ", this.camera.position);
     console.log("view matrix:", this.camera.getViewMatrix());
 
+    var invView = new BABYLON.Matrix();
+		this.camera.getViewMatrix().invertToRef(invView);
+		var direction = BABYLON.Vector3.TransformNormal(new BABYLON.Vector3(0, 0, 1), invView);
+		
+    direction.normalize();
+    
+    console.log("direction: ", direction);
+
     // use offsets in translatePositions function to create net on camera location
     const offsets = [this.camera.position.x, this.camera.position.y, this.camera.position.z];
 
-      this.shoot(offsets);
+      this.shoot(offsets, direction);
   }
 
 };

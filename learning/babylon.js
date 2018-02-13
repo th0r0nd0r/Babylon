@@ -36,10 +36,14 @@ const translatePositions = (positions, offsets) => {
   return positions;
 };
 
-function shootNet(offsets) {
+function shootNet(offsets, direction) {
 
   if (!offsets) {
     offsets = [0,0,0];
+  }
+
+  if (!direction) {
+    direction = {x: 0, y: 0, z: .5};
   }
 
   var subdivisions = 20;
@@ -96,11 +100,11 @@ function shootNet(offsets) {
 
   
   //create the impostors
-  console.log("spheres: ", spheres);
+  console.log("DIRECTION: ", direction);
   spheres.forEach(function (point, idx) {
     var mass = 10;
     point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.SphereImpostor, { mass: mass, restitution: 0, radius: .1, friction: 1 }, scene);
-    point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(0,0,20));
+    point.physicsImpostor.setLinearVelocity( new BABYLON.Vector3(direction.x * 40,direction.y * 40, direction.z * 40));
       if (idx >= subdivisions) {
         createJoint(point.physicsImpostor, spheres[idx - subdivisions].physicsImpostor, false);
       if (idx % subdivisions) {
@@ -162,6 +166,8 @@ newSphere.physicsImpostor = new BABYLON.PhysicsImpostor(newSphere, BABYLON.Physi
 newSphere.registerBeforeRender ( () => {
   newSphere.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,10,0), newSphere.getAbsolutePosition());
 });
+
+
 
 return scene;
 
